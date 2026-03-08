@@ -11,7 +11,10 @@ const Chatting = () => {
     console.log({ userId })
 
     const [messages, setMessages] = useState([
-        { id: 1, role: 'assistant', content: '안녕하세요! 무엇을 도와드릴까요?' }
+        { id: 1, role: 'assistant', content: '안녕하세요! 무엇을 도와드릴까요?' },
+        { id: 2, role: 'user', content: '안녕하세요! 무엇을 도와드릴까요?' },
+        { id: 3, role: 'assistant', content: '안녕하세요! 무엇을 도와드릴까요?' },
+        { id: 4, role: 'user', content: '안녕하세요! 무엇을 도와드릴까요?' }
     ]);
 
     const sendMessage = (text) => {
