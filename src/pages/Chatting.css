@@ -1,0 +1,51 @@
+.chat-page-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 사이드바 스타일 */
+.chat-sidebar {
+  width: 260px;
+  background-color: #202123;
+  color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 메인 채팅 영역 */
+.chat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+/* 채팅창 (스크롤 가능하게) */
+.chat-window {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 20%; /* 가운데 정렬 느낌 */
+}
+
+/* 메시지 버블 */
+.message-bubble {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* 입력창 영역 (하단 고정) */
+.chat-input-form {
+  padding: 20px 20%;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input-form input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
