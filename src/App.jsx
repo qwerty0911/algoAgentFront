@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path='/'
           element={<Home />} />
-        <Route path='/chatting/:userId'
+        <Route path='/chatting/:nickname/:session_id'
           element={<Chatting />} />
         <Route path="*"
           element={<NotFound />} />

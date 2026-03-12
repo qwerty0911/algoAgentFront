@@ -1,4 +1,5 @@
 const ChatWindow = ({ messages }) => {
+
   return (
     <div className="chat-window">
       {messages.map((msg) => (

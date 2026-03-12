@@ -1,15 +1,16 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ChatSidebar from '../components/ChatSidebar';
 import ChatWindow from '../components/ChatWindow';
 import ChatInput from '../components/ChatInput';
-import './Chatting.css'; // 레이아웃용 CSS
+import './Chatting.css'; 
+import useUserStore from "../store/useUserStore.js"
+
 
 const Chatting = () => {
-    const { userId } = useParams();
-
-    console.log({ userId })
-
+    //const { userId } = useParams();
+    const user_id = useUserStore((state) => state.user_id);
+    const { session_id } = useParams();
 
     const [messages, setMessages] = useState([
         { id: 1, role: 'assistant', content: '안녕하세요! 무엇을 도와드릴까요?' },
@@ -17,11 +18,32 @@ const Chatting = () => {
         { id: 3, role: 'assistant', content: '안녕하세요! 무엇을 도와드릴까요?' },
         { id: 4, role: 'user', content: '안녕하세요! 무엇을 도와드릴까요?' }
     ]);
+    
+    // 페이지에 들어오자마자 실행됨 (Initialize)
+  useEffect(() => {
+
+    const fetchSessions = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/getMessages?session_id=${session_id}`, { method: 'GET', });
+        if (response.ok) {
+          const data = await response.json();
+          setMessages(data);
+          console.log(data)
+        }
+
+      } catch (error) {
+        console.error("메시지 로드 실패:", error);
+      }
+    };
+
+    fetchSessions();
+  }, [session_id]);
 
     // AI가 답변 중인지 확인하는 상태 (로딩 처리용)
     const [isLoading, setIsLoading] = useState(false);
 
     const sendMessage = async (text) => {
+        
         if (isLoading) return; // 이미 답변 중이면 중복 요청 방지
 
         // 1. 내 메시지를 먼저 화면에 추가
@@ -32,14 +54,15 @@ const Chatting = () => {
 
         try {
             // 2. LangChain 기반 백엔드 서비스에 POST 요청
-            const response = await fetch('http://localhost:8000/testMessage', { // 실제 백엔드 URL로 수정 필요
+            const response = await fetch('http://localhost:8000/sendmessage', { // 실제 백엔드 URL로 수정 필요
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user_id: userId,
-                    message: text,
+                    session_id: session_id,
+                    user_id: user_id,
+                    content: text,
                 }),
             });
 
@@ -51,7 +74,7 @@ const Chatting = () => {
             const aiMsg = { 
                 id: Date.now() + 1, 
                 role: 'assistant', 
-                content: data.reply // 백엔드에서 주는 key값에 맞춰서 수정 (예: data.content)
+                content: data.content // 백엔드에서 주는 key값에 맞춰서 수정 (예: data.content)
             };
             setMessages((prev) => [...prev, aiMsg]);
 
