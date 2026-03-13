@@ -12,12 +12,7 @@ const Chatting = () => {
     const user_id = useUserStore((state) => state.user_id);
     const { session_id } = useParams();
 
-    const [messages, setMessages] = useState([
-        { id: 1, role: 'assistant', content: '안녕하세요! 무엇을 도와드릴까요?' },
-        { id: 2, role: 'user', content: '안녕하세요! 무엇을 도와드릴까요?' },
-        { id: 3, role: 'assistant', content: '안녕하세요! 무엇을 도와드릴까요?' },
-        { id: 4, role: 'user', content: '안녕하세요! 무엇을 도와드릴까요?' }
-    ]);
+    const [messages, setMessages] = useState([]);
     
     // 페이지에 들어오자마자 실행됨 (Initialize)
   useEffect(() => {
