@@ -31,6 +31,7 @@
 
 /* 메시지 버블 */
 .message-bubble {
+  white-space: pre-wrap; /* 줄바꿈을 유지하고, 넘치면 자동으로 줄바꿈 처리 */
   background-color: #ccc;
   display: flex;
   gap: 20px;

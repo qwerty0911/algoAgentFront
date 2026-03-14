@@ -41,14 +41,12 @@ const Chatting = () => {
         
         if (isLoading) return; // 이미 답변 중이면 중복 요청 방지
 
-        // 1. 내 메시지를 먼저 화면에 추가
         const newUserMsg = { id: Date.now(), role: 'user', content: text };
         setMessages((prev) => [...prev, newUserMsg]);
         
-        setIsLoading(true); // 로딩 시작
+        setIsLoading(true);
 
         try {
-            // 2. LangChain 기반 백엔드 서비스에 POST 요청
             const response = await fetch('http://localhost:8000/sendmessage', { // 실제 백엔드 URL로 수정 필요
                 method: 'POST',
                 headers: {
@@ -65,17 +63,17 @@ const Chatting = () => {
 
             const data = await response.json();
 
-            // 3. 서버에서 받은 AI 답변을 화면에 추가
+            console.log(data)
+
             const aiMsg = { 
                 id: Date.now() + 1, 
                 role: 'assistant', 
-                content: data.content // 백엔드에서 주는 key값에 맞춰서 수정 (예: data.content)
+                content: data.content
             };
             setMessages((prev) => [...prev, aiMsg]);
 
         } catch (error) {
             console.error("통신 에러:", error);
-            // 에러 메시지도 채팅창에 띄워주면 좋습니다.
             setMessages((prev) => [...prev, { 
                 id: Date.now() + 2, 
                 role: 'assistant', 
