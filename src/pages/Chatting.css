@@ -348,3 +348,33 @@
   border: 1px solid #ccc;
   border-radius: 8px;
 }
+
+.text-link-btn {
+  /* 1. 버튼 기본 스타일 완전히 제거 */
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit; /* 부모 폰트 설정 따름 */
+  cursor: pointer;
+
+  /* 2. 원하는 디자인 적용 */
+  color: #8c8c8c;        /* 차분한 회색 (Antd의 disable/secondary 계열) */
+  text-decoration: underline; /* 밑줄 추가 */
+  text-underline-offset: 4px; /* 밑줄과 글자 사이 간격 (디테일!) */
+  font-size: 13px;       /* 약간 작게 설정해서 부가 정보 느낌 주기 */
+  
+  transition: color 0.2s ease;
+}
+
+/* 마우스 올렸을 때 피드백 */
+.text-link-btn:hover {
+  color: #595959;        /* 조금 더 진한 회색으로 변경 */
+  text-decoration-thickness: 1.5px; /* 밑줄을 살짝 두껍게 */
+}
+
+/* 카드 하단 정렬을 위한 푸터 스타일 */
+.recommand-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+}

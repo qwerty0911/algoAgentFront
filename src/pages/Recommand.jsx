@@ -6,6 +6,12 @@ import { getSolvedAcTierDisplay } from '../utils/solvedAcLevel.js';
 
 function ProblemRecommendationCard({ problem_id, title, level, tags = [] }) {
   const { tierKey, label } = getSolvedAcTierDisplay(level);
+  const goToProblem = (e) => {
+
+    e.stopPropagation(); 
+    window.open(`https://boj.ma/${problem_id}`, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <article className="recommand-card">
       <div className="recommand-card-meta">
@@ -24,6 +30,16 @@ function ProblemRecommendationCard({ problem_id, title, level, tags = [] }) {
           </li>
         ))}
       </ul>
+
+      <div className="recommand-footer">
+        <button 
+          type="button" 
+          className="text-link-btn" 
+          onClick={goToProblem}
+        >
+          문제 풀러 가기
+        </button>
+      </div>
     </article>
   );
 }
@@ -66,8 +82,7 @@ export const RecommandContent = () => {
         <header className="recommand-page-header">
           <h1 className="recommand-page-title">문제 추천</h1>
           <p className="recommand-page-desc">
-            서버에서 내려준 <code>problem_id</code>, <code>title</code>,{' '}
-            <code>level</code>, <code>tags</code>를 카드로 표시합니다.
+            AI Agent 가 추천한 문제의 로드맵이 표시됩니다.
           </p>
         </header>
         <div className="recommand-grid">
