@@ -1,0 +1,226 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #050816;
+  color: #f9fafb;
+}
+
+body {
+  line-height: 1.5;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Home (AI Agent Landing) */
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at top, #1d4ed8 0, transparent 55%),
+    radial-gradient(circle at bottom, #4b5563 0, transparent 55%),
+    #020617;
+  color: #e5e7eb;
+}
+
+.home-hero {
+  flex: 1;
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 64px 24px 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
+  gap: 40px;
+  align-items: center;
+}
+
+.home-hero-text {
+  max-width: 640px;
+}
+
+.home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  color: #a5b4fc;
+  margin-bottom: 16px;
+}
+
+.home-title {
+  margin: 0 0 18px;
+  font-size: 2.4rem;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+  color: #f9fafb;
+}
+
+.home-subtitle {
+  margin: 0 0 20px;
+  font-size: 0.98rem;
+  color: #cbd5f5;
+}
+
+.home-feature-list {
+  margin: 0;
+  padding-left: 1rem;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.home-feature-list li {
+  position: relative;
+  padding-left: 18px;
+  color: #d1d5db;
+}
+
+.home-feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.5);
+}
+
+.home-hero-panel {
+  background: rgba(15, 23, 42, 0.98);
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.8);
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home-hero-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+  padding-bottom: 10px;
+}
+
+.home-hero-panel-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.home-hero-panel-desc {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.home-hero-panel-body {
+  padding-top: 4px;
+}
+
+.home-footer {
+  padding: 16px 24px 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+@media (max-width: 900px) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 40px;
+    padding-bottom: 32px;
+  }
+
+  .home-hero-panel {
+    order: -1;
+  }
+
+  .home-title {
+    font-size: 2rem;
+  }
+}
+
+/* Login form (Home 카드 안) */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+
+.login-input {
+  border-radius: 10px;
+  border: 1px solid #4b5563;
+  background-color: #020617;
+  padding: 10px 12px;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.login-input::placeholder {
+  color: #6b7280;
+}
+
+.login-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.6);
+  background-color: #020617;
+}
+
+.login-button {
+  margin-top: 6px;
+  border-radius: 999px;
+  border: none;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6366f1, #22c55e);
+  color: #f9fafb;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.8);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+}
+
+.login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.9);
+}

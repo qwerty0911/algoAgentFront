@@ -12,40 +12,49 @@ const Login = () => {
     const handleLogin = async () => {
 
         try {
-            // 1. LangChain 기반 백엔드 서비스에 POST 요청
-            const response = await fetch('http://localhost:8000/login', { // 실제 백엔드 URL로 수정 필요
+            const response = await fetch('http://localhost:8000/login', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json' },
-                body: JSON.stringify({ "nickname": nickname })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nickname })
             });
 
             if (response.ok) {
-                // 로그인 성공 시에만 채팅 페이지로 이동!
                 const newSessionId = uuidv4();
-                navigate(`/chatting/${nickname}/${newSessionId}`);
                 const data = await response.json();
-                setUserInfo(data.user_id, data.nickname)
+
+                setUserInfo(data.user_id, data.nickname);
+                navigate(`/chatting/${data.nickname}/${newSessionId}`);
             } else {
                 alert("로그인 정보가 틀렸습니다.");
             }
         } catch (error) {
-            <alert>로그인을 할 수 없습니다.!!!</alert>
+            alert("로그인을 할 수 없습니다. 잠시 후 다시 시도해주세요.");
             console.error(error);
         }
     };
 
     return (
-        <>
-            <h2>login 모달</h2>
-            <p>
+        <form
+            className="login-form"
+            onSubmit={(e) => {
+                e.preventDefault();
+                if (!nickname.trim()) return;
+                handleLogin();
+            }}
+        >
+            <label className="login-label">
+                <span className="login-label-text">Solved.ac 닉네임</span>
                 <input
+                    className="login-input"
                     value={nickname}
                     onChange={(e) => setUserId(e.target.value)}
-                    placeholder="아이디를 입력하세요"
+                    placeholder="예: beom_kim"
                 />
-            </p>
-            <button onClick={handleLogin}>login</button>
-        </>
+            </label>
+            <button type="submit" className="login-button">
+                에이전트와 시작하기
+            </button>
+        </form>
     )
 
 }

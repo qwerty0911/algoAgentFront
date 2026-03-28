@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import ChatSidebar from '../components/ChatSidebar';
 import ChatWindow from '../components/ChatWindow';
 import ChatInput from '../components/ChatInput';
+import { RecommandContent } from './Recommand.jsx';
 import './Chatting.css'; 
 import useUserStore from "../store/useUserStore.js"
 
@@ -13,6 +14,7 @@ const Chatting = () => {
     const { session_id } = useParams();
 
     const [messages, setMessages] = useState([]);
+    const [activePanel, setActivePanel] = useState('chat'); // 'chat' | 'roadmap'
     
     // 페이지에 들어오자마자 실행됨 (Initialize)
   useEffect(() => {
@@ -22,8 +24,16 @@ const Chatting = () => {
         const response = await fetch(`http://localhost:8000/getMessages?session_id=${session_id}`, { method: 'GET', });
         if (response.ok) {
           const data = await response.json();
-          setMessages(data);
-          console.log(data)
+          // 백엔드 응답이 배열이거나 { messages: [...] } 처럼 감싸져 있어도 동작하도록 처리
+          const normalizedMessages = Array.isArray(data)
+            ? data
+            : Array.isArray(data?.messages)
+              ? data.messages
+              : Array.isArray(data?.data)
+                ? data.data
+                : [];
+          setMessages(normalizedMessages);
+          console.log('getMessages normalized:', normalizedMessages);
         }
 
       } catch (error) {
@@ -36,6 +46,8 @@ const Chatting = () => {
 
     // AI가 답변 중인지 확인하는 상태 (로딩 처리용)
     const [isLoading, setIsLoading] = useState(false);
+
+    const displayUserId = user_id && user_id !== 'null' ? user_id : 'Unknown';
 
     const sendMessage = async (text) => {
         
@@ -65,10 +77,17 @@ const Chatting = () => {
 
             console.log(data)
 
+            const aiText =
+              data?.content ??
+              data?.message ??
+              data?.reply ??
+              data?.text ??
+              '';
+
             const aiMsg = { 
                 id: Date.now() + 1, 
                 role: 'assistant', 
-                content: data.content
+                content: aiText
             };
             setMessages((prev) => [...prev, aiMsg]);
 
@@ -89,8 +108,36 @@ const Chatting = () => {
             <ChatSidebar />{/* 왼쪽 사이드바 */}
 
             <main className="chat-content">{/* 오른쪽 메인 채팅 영역 */}
-                <ChatWindow messages={messages} />
-                <ChatInput onSend={sendMessage} />
+                <div className="chat-top-panel">
+                    <div className="chat-top-tabs">
+                        <button
+                            type="button"
+                            className={`chat-tab-btn ${activePanel === 'chat' ? 'active' : ''}`}
+                            onClick={() => setActivePanel('chat')}
+                        >
+                            채팅영역
+                        </button>
+                        <button
+                            type="button"
+                            className={`chat-tab-btn ${activePanel === 'roadmap' ? 'active' : ''}`}
+                            onClick={() => setActivePanel('roadmap')}
+                        >
+                            문제 로드맵
+                        </button>
+                    </div>
+                    <div className="chat-user-id">
+                        user_id: {displayUserId}
+                    </div>
+                </div>
+
+                {activePanel === 'chat' ? (
+                    <>
+                        <ChatWindow messages={messages} isLoading={isLoading} />
+                        <ChatInput onSend={sendMessage} />
+                    </>
+                ) : (
+                    <RecommandContent />
+                )}
             </main>
         </div>
     );
