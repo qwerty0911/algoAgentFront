@@ -4,7 +4,7 @@ import ChatSidebar from '../components/ChatSidebar';
 import ChatWindow from '../components/ChatWindow';
 import ChatInput from '../components/ChatInput';
 import { RecommandContent } from './Recommand.jsx';
-import './Chatting.css'; 
+import './Chatting.css';
 import useUserStore from "../store/useUserStore.js"
 
 
@@ -15,34 +15,38 @@ const Chatting = () => {
 
     const [messages, setMessages] = useState([]);
     const [activePanel, setActivePanel] = useState('chat'); // 'chat' | 'roadmap'
-    
+
     // 페이지에 들어오자마자 실행됨 (Initialize)
-  useEffect(() => {
+    useEffect(() => {
+        const fetchSessions = async () => {
+            if (!session_id || !user_id) {
+                console.log("세션 ID 또는 유저 ID가 아직 준비되지 않았습니다.");
+                return;
+            }
 
-    const fetchSessions = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/getMessages?session_id=${session_id}`, { method: 'GET', });
-        if (response.ok) {
-          const data = await response.json();
-          // 백엔드 응답이 배열이거나 { messages: [...] } 처럼 감싸져 있어도 동작하도록 처리
-          const normalizedMessages = Array.isArray(data)
-            ? data
-            : Array.isArray(data?.messages)
-              ? data.messages
-              : Array.isArray(data?.data)
-                ? data.data
-                : [];
-          setMessages(normalizedMessages);
-          console.log('getMessages normalized:', normalizedMessages);
-        }
+            try {
+                const response = await fetch(`http://localhost:8000/getMessages?session_id=${session_id}`, { method: 'GET', });
+                if (response.ok) {
+                    const data = await response.json();
+                    // 백엔드 응답이 배열이거나 { messages: [...] } 처럼 감싸져 있어도 동작하도록 처리
+                    const normalizedMessages = Array.isArray(data)
+                        ? data
+                        : Array.isArray(data?.messages)
+                            ? data.messages
+                            : Array.isArray(data?.data)
+                                ? data.data
+                                : [];
+                    setMessages(normalizedMessages);
+                    console.log('getMessages normalized:', normalizedMessages);
+                }
 
-      } catch (error) {
-        console.error("메시지 로드 실패:", error);
-      }
-    };
+            } catch (error) {
+                console.error("메시지 로드 실패:", error);
+            }
+        };
 
-    fetchSessions();
-  }, [session_id]);
+        fetchSessions();
+    }, [session_id, user_id]);
 
     // AI가 답변 중인지 확인하는 상태 (로딩 처리용)
     const [isLoading, setIsLoading] = useState(false);
@@ -50,12 +54,12 @@ const Chatting = () => {
     const displayUserId = user_id && user_id !== 'null' ? user_id : 'Unknown';
 
     const sendMessage = async (text) => {
-        
+
         if (isLoading) return; // 이미 답변 중이면 중복 요청 방지
 
         const newUserMsg = { id: Date.now(), role: 'user', content: text };
         setMessages((prev) => [...prev, newUserMsg]);
-        
+
         setIsLoading(true);
 
         try {
@@ -78,25 +82,25 @@ const Chatting = () => {
             console.log(data)
 
             const aiText =
-              data?.content ??
-              data?.message ??
-              data?.reply ??
-              data?.text ??
-              '';
+                data?.content ??
+                data?.message ??
+                data?.reply ??
+                data?.text ??
+                '';
 
-            const aiMsg = { 
-                id: Date.now() + 1, 
-                role: 'assistant', 
+            const aiMsg = {
+                id: Date.now() + 1,
+                role: 'assistant',
                 content: aiText
             };
             setMessages((prev) => [...prev, aiMsg]);
 
         } catch (error) {
             console.error("통신 에러:", error);
-            setMessages((prev) => [...prev, { 
-                id: Date.now() + 2, 
-                role: 'assistant', 
-                content: '죄송합니다. 서버와 연결할 수 없습니다.' 
+            setMessages((prev) => [...prev, {
+                id: Date.now() + 2,
+                role: 'assistant',
+                content: '죄송합니다. 서버와 연결할 수 없습니다.'
             }]);
         } finally {
             setIsLoading(false); // 성공하든 실패하든 로딩 종료
